@@ -33,12 +33,12 @@ class Character
 
         void Die();
 
-        void WalkTo(bool CanWalk);
+        void WalkTo(Grid* battlefield, int Index);
 
         void StartTurn(Grid* battlefield);
 
         bool CheckCloseTargets(Grid* battlefield);
 
-        void Attack(shared_ptr<Character> target);
+        void Attack();
 };
 
