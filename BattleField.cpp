@@ -1,6 +1,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <algorithm>
 #include "Grid.h"
 #include "BattleField.h"
 #include "Types.h"
@@ -9,10 +10,10 @@
 
 using namespace std;
 
+
 BattleField::BattleField() 
 {
     grid = new Grid(5, 5);
-    AllPlayers = new list<Character>();
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
     Setup();
@@ -28,7 +29,7 @@ void BattleField::GetPlayerChoice()
     //asks for the player to choose between for possible classes via console.
     printf("Choose Between One of this Classes:\n");
 
-    printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
+    printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer\n");
     //store the player choice in a variable
     int choice;
     
@@ -42,31 +43,12 @@ void BattleField::GetPlayerChoice()
     {
         GetPlayerChoice();
     }
-
-    /*switch (choice)
-    {
-        case 1:
-            CreatePlayerCharacter(choice);
-            break;
-        case 2:
-            CreatePlayerCharacter(choice);
-            break;
-        case 3:
-            CreatePlayerCharacter(choice);
-            break;
-        case 4:
-            CreatePlayerCharacter(choice);
-            break;
-        default:
-            GetPlayerChoice();
-            break;
-    }*/
 }
 
 void BattleField::CreatePlayerCharacter(int classIndex)
 {
     Types::CharacterClass characterClass = (Types::CharacterClass)classIndex;
-    printf("Player Class Choice: {characterClass}");
+    printf("Player Class Choice: {characterClass}\n");
     
     PlayerCharacter = std::make_shared<Character>(characterClass);
     
@@ -83,7 +65,7 @@ void BattleField::CreateEnemyCharacter()
     int randomInteger = GetRandomInt(1, 4);
     Types::CharacterClass enemyClass = (Types::CharacterClass)randomInteger;
 
-    printf("Enemy Class Choice: {enemyClass}");
+    printf("Enemy Class Choice: {enemyClass}\n");
 
     EnemyCharacter = std::make_shared<Character>(enemyClass);
     EnemyCharacter->Health = 100;
@@ -99,8 +81,8 @@ void BattleField::StartGame()
     EnemyCharacter->target = PlayerCharacter;
     PlayerCharacter->target = EnemyCharacter;
 
-    AllPlayers->push_back(*PlayerCharacter);
-    AllPlayers->push_back(*EnemyCharacter);
+    AllPlayers.push_back(PlayerCharacter);
+    AllPlayers.push_back(EnemyCharacter);
 
     AlocatePlayers();
     StartTurn();
@@ -108,17 +90,16 @@ void BattleField::StartGame()
 
 void BattleField::StartTurn() 
 {
-
     if (currentTurn == 0)
     {
-        //AllPlayers.Sort();  
+        AllPlayers.sort();  
     }
 
-    std::list<Character>::iterator it;
+    std::list<shared_ptr<Character>>::iterator it;
 
-    for (it = AllPlayers->begin(); it != AllPlayers->end(); ++it) 
+    for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) 
     {
-        it->StartTurn(grid);
+        (*it)->StartTurn(grid);
     }
 
     currentTurn++;
