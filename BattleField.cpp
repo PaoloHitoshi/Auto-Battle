@@ -85,6 +85,7 @@ void BattleField::StartGame()
     AllPlayers.push_back(EnemyCharacter);
 
     AlocatePlayers();
+    getchar();
     StartTurn();
 }
 
@@ -110,14 +111,15 @@ void BattleField::HandleTurn()
 {
     if (PlayerCharacter->Health == 0)
     {
+        printf("\n");
+        printf("You lost!");
+        printf("\n");
         return;
     }
     else if (EnemyCharacter->Health == 0)
     {
         printf("\n");
-
-        // endgame?
-
+        printf("You won!");
         printf("\n");
 
         return;
@@ -128,8 +130,8 @@ void BattleField::HandleTurn()
         printf("Click on any key to start the next turn...\n");
         printf("\n");
 
-        //TODO
-        //ConsoleKeyInfo key = Console.ReadKey();
+        cin.get();
+
         StartTurn();
     }
 }
