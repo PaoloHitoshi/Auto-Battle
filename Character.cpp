@@ -19,18 +19,13 @@ Character::~Character()
 
 bool Character::TakeDamage(float amount) 
 {
-	if ((Health -= BaseDamage) <= 0) 
+    Health -= amount;
+	if (Health <= 0) 
 	{
-		Die();
+        Health = 0;
 		return true;
 	}
 	return false;
-}
-
-void Character::Die() 
-{
-	// TODO >> kill
-	//TODO >> end the game?
 }
 
 void Character::WalkTo(bool CanWalk) 
@@ -118,6 +113,6 @@ bool Character::CheckCloseTargets(Grid* battlefield)
 
 void Character::Attack(shared_ptr<Character> target) 
 {
-
+    target->TakeDamage(BaseDamage);
 }
 
