@@ -34,7 +34,16 @@ void BattleField::GetPlayerChoice()
     
     cin >> choice;
     
-    switch (choice)
+    if(choice >= 1 && choice <= 4)
+    {
+        CreatePlayerCharacter(choice);
+    }
+    else
+    {
+        GetPlayerChoice();
+    }
+
+    /*switch (choice)
     {
         case 1:
             CreatePlayerCharacter(choice);
@@ -51,7 +60,7 @@ void BattleField::GetPlayerChoice()
         default:
             GetPlayerChoice();
             break;
-    }
+    }*/
 }
 
 void BattleField::CreatePlayerCharacter(int classIndex)
@@ -146,7 +155,6 @@ void BattleField::HandleTurn()
 
 int BattleField::GetRandomInt(int min, int max)
 {
-    
     int index = rand()%(max-min+1)+min;
 
     return index;
