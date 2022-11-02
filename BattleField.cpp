@@ -147,7 +147,7 @@ void BattleField::HandleTurn()
 int BattleField::GetRandomInt(int min, int max)
 {
     
-    int index = GetRandomInt(min, max);
+    int index = rand()%(max-min+1)+min;
 
     return index;
 }
