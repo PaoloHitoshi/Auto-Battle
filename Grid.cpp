@@ -1,12 +1,13 @@
+#include <stdio.h>
 #include "Grid.h"
 #include "Types.h"
-
 
 Grid::Grid(int Lines, int Columns)
 {
     xLenght = Lines;
     yLength = Columns;
     //Console.WriteLine("The battle field has been created\n");
+
     for (int i = 0; i < Lines; i++)
     {
 
@@ -31,8 +32,8 @@ void Grid::drawBattlefield(int Lines, int Columns)
     {
         for (int j = 0; j < Columns; j++)
         {
-            Types::GridBox* currentgrid = new Types::GridBox();
-            if (currentgrid->ocupied)
+            Types::GridBox* currentgrid = grids[Columns * i + j]; 
+            if (currentgrid->occupied)
             {
                 //if()
                 printf("[X]\t");

@@ -1,44 +1,44 @@
 #pragma once
+#include <memory>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
 
+using namespace std;
+
 class Character
 {
-public:
+    public:
 
-    Character(Types::CharacterClass charcaterClass);
-    ~Character();
+        Character(Types::CharacterClass characterClass);
+        ~Character();
+  
+        float Health;
+        float BaseDamage;
+        float DamageMultiplier;
+        //public GridBox currentBox;
+        int PlayerIndex;
+        //public Character Target{ get; set; }
 
-    
-    float Health;
-    float BaseDamage;
-    float DamageMultiplier;
-    //public GridBox currentBox;
-    int PlayerIndex;
-    //public Character Target{ get; set; }
+        shared_ptr<Character> target;
 
-    Character* target;
+        bool IsDead;
+        char Icon;
 
-    bool IsDead;
-    char Icon;
+        Types::GridBox* currentBox;
 
-    Types::GridBox currentBox;
+        bool TakeDamage(float amount);
 
-    bool TakeDamage(float amount);
+        int getIndex(vector<Types::GridBox*> v, int index);
 
-    int getIndex(vector<Types::GridBox*> v, int index);
+        void Die();
 
-    void Die();
+        void WalkTo(bool CanWalk);
 
-    void WalkTo(bool CanWalk);
+        void StartTurn(Grid* battlefield);
 
-    void StartTurn(Grid* battlefield);
+        bool CheckCloseTargets(Grid* battlefield);
 
-    bool CheckCloseTargets(Grid* battlefield);
-
-    void Attack(Character* target);
-
-
+        void Attack(shared_ptr<Character> target);
 };
 

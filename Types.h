@@ -1,31 +1,31 @@
 #pragma once
+
 class Types
 {
-public:
+    public:
 
-    struct GridBox
-    {
-        int xIndex;
-        int yIndex;
-        bool ocupied;
-        int Index;
-
-        GridBox(int x, int y, bool ocupied, int index)
+        struct GridBox
         {
-            xIndex = x;
-            yIndex = y;
-            ocupied = ocupied;
-            Index = index;
-        }
-    };
+            int xIndex;
+            int yIndex;
+            bool occupied;
+            int Index;
 
-    enum CharacterClass
-    {
-        Paladin = 1,
-        Warrior = 2,
-        Cleric = 3,
-        Archer = 4
-    };
+            GridBox(int x, int y, bool occupied, int index)
+            {
+                xIndex = x;
+                yIndex = y;
+                occupied = occupied;
+                Index = index;
+            }
+        };
 
+        enum CharacterClass
+        {
+            Paladin = 1,
+            Warrior = 2,
+            Cleric = 3,
+            Archer = 4
+        };
 };
 

@@ -1,48 +1,50 @@
 #pragma once
-#include "Character.h"
-#include "Types.h"
 #include <list>
 #include <iostream>
+#include <memory>
+#include "Character.h"
+#include "Types.h"
 #include "Grid.h"
+
 using namespace std;
+
 class BattleField
 {
-public:
+	public:
 
-	BattleField();
+		BattleField();
 
-	Grid* grid;
-	Types::GridBox* PlayerCurrentLocation;
-	Types::GridBox* EnemyCurrentLocation;
-	list<Character>* AllPlayers;
-	shared_ptr<Character> PlayerCharacter;
-	//Character* PlayerCharacter;
-	shared_ptr<Character>* EnemyCharacter;
-	int currentTurn;
-	int numberOfPossibleTiles;
+		Grid* grid;
+		Types::GridBox* PlayerCurrentLocation;
+		Types::GridBox* EnemyCurrentLocation;
+		list<Character>* AllPlayers;
+		shared_ptr<Character> PlayerCharacter;
+		//Character* PlayerCharacter;
+		shared_ptr<Character> EnemyCharacter;
+		int currentTurn;
+		int numberOfPossibleTiles;
 
+		void Setup();
 
-	void Setup();
+		void GetPlayerChoice();
 
-	void GetPlayerChoice();
+		void CreatePlayerCharacter(int classIndex);
 
-	void CreatePlayerCharacter(int classIndex);
+		void CreateEnemyCharacter();
 
-	void CreateEnemyCharacter();
+		void StartGame();
 
-	void StartGame();
+		void StartTurn();
 
-	void StartTurn();
+		void HandleTurn();
 
-	void HandleTurn();
+		int GetRandomInt(int min, int max);
 
-	int GetRandomInt(int min, int max);
+		void AlocatePlayers();
 
-	void AlocatePlayers();
+		void AlocatePlayerCharacter();
 
-	void AlocatePlayerCharacter();
-
-	void AlocateEnemyCharacter();
+		void AlocateEnemyCharacter();
 };
 
 
