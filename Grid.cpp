@@ -6,7 +6,6 @@ Grid::Grid(int Lines, int Columns)
 {
     xLenght = Lines;
     yLength = Columns;
-    //Console.WriteLine("The battle field has been created\n");
 
     for (int i = 0; i < Lines; i++)
     {
@@ -15,10 +14,8 @@ Grid::Grid(int Lines, int Columns)
         {
             Types::GridBox* newBox = new Types::GridBox(i, j, false, (Columns * i + j));
             grids.insert(grids.end(), newBox);
-            //Console.Write($"{newBox.Index}\n");
         }
     }
-	//drawBattlefield(Lines, Columns);
 }
 
 Grid::~Grid() 
@@ -35,7 +32,6 @@ void Grid::drawBattlefield(int Lines, int Columns)
             Types::GridBox* currentgrid = grids[Columns * i + j]; 
             if (currentgrid->occupied)
             {
-                //if()
                 printf("[X]\t");
             }
             else

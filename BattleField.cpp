@@ -10,18 +10,23 @@
 
 using namespace std;
 
-
 BattleField::BattleField() 
 {
     grid = new Grid(5, 5);
-    int currentTurn = 0;
-    int numberOfPossibleTiles = grid->grids.size();
-    Setup();
+    currentTurn = 0;
+    numberOfPossibleTiles = grid->grids.size();
+    numberOfCharacters = 2;
+    numberOfPlayersAlive = numberOfCharacters;
+    numberOfEnemiesAlive = numberOfCharacters;
 }
 
 void BattleField::Setup()
 {
-    GetPlayerChoice();
+    for(int i = 0; i < numberOfCharacters; i++)
+    {
+        GetPlayerChoice();
+    }
+    StartGame();
 }
 
 void BattleField::GetPlayerChoice()
@@ -56,6 +61,8 @@ void BattleField::CreatePlayerCharacter(int classIndex)
     PlayerCharacter->BaseDamage = 20;
     PlayerCharacter->PlayerIndex = 0;
 
+    AllPlayers.push_back(PlayerCharacter);
+
     CreateEnemyCharacter();
 }
 
@@ -69,22 +76,16 @@ void BattleField::CreateEnemyCharacter()
 
     EnemyCharacter = std::make_shared<Character>(enemyClass);
     EnemyCharacter->Health = 100;
-    PlayerCharacter->BaseDamage = 20;
-    PlayerCharacter->PlayerIndex = 1;
+    EnemyCharacter->BaseDamage = 20;
+    EnemyCharacter->PlayerIndex = 1;
 
-    StartGame();
+    AllPlayers.push_back(EnemyCharacter);
 }
 
 void BattleField::StartGame()
 {
-    //populates the character variables and targets
-    EnemyCharacter->target = PlayerCharacter;
-    PlayerCharacter->target = EnemyCharacter;
-
-    AllPlayers.push_back(PlayerCharacter);
-    AllPlayers.push_back(EnemyCharacter);
-
     AlocatePlayers();
+    grid->drawBattlefield(grid->xLenght, grid->yLength);
     getchar();
     StartTurn();
 }
@@ -95,28 +96,44 @@ void BattleField::StartTurn()
     {
         AllPlayers.sort();  
     }
-
+    
     std::list<shared_ptr<Character>>::iterator it;
 
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) 
     {
-        (*it)->StartTurn(grid);
+        if((*it)->Health > 0)
+        {
+            (*it)->StartTurn(grid, AllPlayers);
+
+            if((*it)->target->Health == 0)
+            {
+                if((*it)->PlayerIndex == 0)
+                {
+                    numberOfEnemiesAlive -= 1;
+                }
+                else
+                {
+                    numberOfPlayersAlive -= 1;
+                }
+            }
+        }
     }
 
     currentTurn++;
+    
     HandleTurn();
 }
 
 void BattleField::HandleTurn()
 {
-    if (PlayerCharacter->Health == 0)
+    if (numberOfPlayersAlive == 0)
     {
         printf("\n");
         printf("You lost!");
         printf("\n");
         return;
     }
-    else if (EnemyCharacter->Health == 0)
+    else if (numberOfEnemiesAlive == 0)
     {
         printf("\n");
         printf("You won!");
@@ -145,13 +162,15 @@ int BattleField::GetRandomInt(int min, int max)
 
 void BattleField::AlocatePlayers()
 {
-    AlocatePlayerCharacter();
-
+    for(int i = 0; i < numberOfCharacters; i++)
+    {
+        AlocatePlayerCharacter(2*i);
+    }
 }
 
-void BattleField::AlocatePlayerCharacter()
+void BattleField::AlocatePlayerCharacter(int characterIndex)
 {
-    int random = 0;
+    int random = GetRandomInt(0, numberOfPossibleTiles);
     auto l_front = grid->grids.begin();
 
     advance(l_front, random);
@@ -159,23 +178,24 @@ void BattleField::AlocatePlayerCharacter()
 
     if (!RandomLocation->occupied)
     {
-        //Types::GridBox* PlayerCurrentLocation = RandomLocation;
-        PlayerCurrentLocation = *l_front;
+        PlayerCurrentLocation.push_back(*l_front);
         (*l_front)->occupied = true;
-        PlayerCharacter->currentBox = *l_front;
 
-        AlocateEnemyCharacter();
+        auto l_front_player = AllPlayers.begin();
+        advance(l_front_player, characterIndex);
+        (**l_front_player).currentBox = *l_front;
+
+        AlocateEnemyCharacter(characterIndex+1);
     }
     else
     {
-        AlocatePlayerCharacter();
+        AlocatePlayerCharacter(characterIndex);
     }
 }
 
-void BattleField::AlocateEnemyCharacter()
+void BattleField::AlocateEnemyCharacter(int characterIndex)
 {
-    
-    int random = 24;
+    int random = GetRandomInt(0, numberOfPossibleTiles);
     auto l_front = grid->grids.begin();
 
     advance(l_front, random);
@@ -183,13 +203,15 @@ void BattleField::AlocateEnemyCharacter()
     
     if (!RandomLocation->occupied)
     {
-        EnemyCurrentLocation = *l_front;
+        EnemyCurrentLocation.push_back(*l_front);
         (*l_front)->occupied = true;
-        EnemyCharacter->currentBox = *l_front;
-        grid->drawBattlefield(5, 5);
+
+        auto l_front_player = AllPlayers.begin();
+        advance(l_front_player, characterIndex);
+        (**l_front_player).currentBox = *l_front;
     }
     else
     {
-        AlocateEnemyCharacter();
+        AlocateEnemyCharacter(characterIndex);
     }
 }

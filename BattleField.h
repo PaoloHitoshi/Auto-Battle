@@ -15,15 +15,18 @@ class BattleField
 		BattleField();
 
 		Grid* grid;
-		Types::GridBox* PlayerCurrentLocation;
-		Types::GridBox* EnemyCurrentLocation;
+		list<Types::GridBox*> PlayerCurrentLocation;
+		list<Types::GridBox*> EnemyCurrentLocation;
 		list<shared_ptr<Character>> AllPlayers;
 		shared_ptr<Character> PlayerCharacter;
-		//Character* PlayerCharacter;
 		shared_ptr<Character> EnemyCharacter;
+
 		int currentTurn;
 		int numberOfPossibleTiles;
-
+		int numberOfCharacters;
+		int numberOfPlayersAlive;
+		int numberOfEnemiesAlive;
+		
 		void Setup();
 
 		void GetPlayerChoice();
@@ -42,9 +45,9 @@ class BattleField
 
 		void AlocatePlayers();
 
-		void AlocatePlayerCharacter();
+		void AlocatePlayerCharacter(int characterIndex);
 
-		void AlocateEnemyCharacter();
+		void AlocateEnemyCharacter(int characterIndex);
 };
 
 

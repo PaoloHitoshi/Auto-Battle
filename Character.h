@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
+#include <list>
 #include "Grid.h"
-#include "Character.h"
 #include "Types.h"
 
 using namespace std;
@@ -16,10 +16,8 @@ class Character
         float Health;
         float BaseDamage;
         float DamageMultiplier;
-        //public GridBox currentBox;
         int PlayerIndex;
-        //public Character Target{ get; set; }
-
+        
         shared_ptr<Character> target;
 
         bool IsDead;
@@ -35,9 +33,9 @@ class Character
 
         void WalkTo(Grid* battlefield, int Index);
 
-        void StartTurn(Grid* battlefield);
+        void StartTurn(Grid* battlefield, list<shared_ptr<Character>> AllPlayers);
 
-        bool CheckCloseTargets(Grid* battlefield);
+        bool CheckCloseTargets(Grid* battlefield, list<shared_ptr<Character>> AllPlayers);
 
         void Attack();
 };
